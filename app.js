@@ -2,7 +2,9 @@ import React from 'react';
 import { render } from 'react-dom';
 import { StaticMap, MapContext, NavigationControl } from 'react-map-gl';
 import DeckGL, { SimpleMeshLayer, ScenegraphLayer } from 'deck.gl';
+import { load } from "@loaders.gl/core";
 import { OBJLoader } from "@loaders.gl/obj";
+import { GLTFLoader, GLTFScenegraph } from "@loaders.gl/gltf";
 
 const MAPBOX_TOKEN = 'pk.eyJ1IjoiYmVuZGdvbWluMzMzIiwiYSI6ImNrbzJzcThwZjBsbm0zMHE5NnY4a3htNDIifQ.OlRSmGAfK3i6C2gbQACieA'
 
@@ -21,6 +23,7 @@ const NAV_CONTROL_STYLE = {
   left: 10
 };
 
+
 const data = [
   { id: 1, name: 'First', coordinates: [37.617734, 55.751999] }
 ]
@@ -36,6 +39,15 @@ function Root() {
       getOrientation: d => [0, 0, 90],
       sizeScale: 5,
       loaders: [OBJLoader]
+    }),
+    new ScenegraphLayer({
+      id: 'scenegraph-layer',
+      data,
+      scenegraph: 'scene.gltf',
+      sizeScale: 5,
+      _lighting: 'pbr',
+      getPosition: d => [d.coordinates[0] - 0.013, d.coordinates[1]],
+      getOrientation: d => [0, 0, 90]
     })
   ];
 
@@ -53,3 +65,4 @@ function Root() {
 }
 
 render(<Root />, document.body.appendChild(document.createElement('div')));
+
